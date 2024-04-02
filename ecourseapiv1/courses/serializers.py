@@ -46,7 +46,8 @@ class UserSerializer(serializers.ModelSerializer):
     avatar = serializers.FileField(max_length=None, allow_empty_file=False, use_url=True)
     def to_representation(self, instance):
         rep = super().to_representation(instance)
-        rep['avatar'] = instance.avatar.url
+        if rep['avatar'] is not None:
+            rep['avatar'] = instance.avatar.url
 
         return rep
 
@@ -72,6 +73,6 @@ class UserSerializer(serializers.ModelSerializer):
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
-        fields = ['id','content','user','lesson']
+        fields = ['id','content','user','created_date']
 
 

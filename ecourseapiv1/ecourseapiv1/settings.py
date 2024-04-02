@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
     'rest_framework',
     'drf_yasg',
-    # 'rest_framework.authtoken'
+    # 'rest_framework.authtoken',
+    'oauth2_provider',
 ]
 
 CKEDITOR_UPLOAD_PATH = "ckeditors/images/"
@@ -146,6 +147,16 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # REST_FRAMEWORK = {
 #     'DEFAULT_AUTHENTICATION_CLASSES': [
 #         'rest_framework.authentication.BasicAuthentication',
-#         'rest_framework.authentication.TokenAuthentication'
+#         'rest_framework.authentication.TokenAuthentication',
 #     ]
 # }
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        # 'rest_framework.parsers.JSONParser',
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication'
+    ]
+}
+
+client_id = 'YacLt0cELDx3bOvquNECqvjDBMmLH5xLqC9EAaJ0'
+client_secret = 'uA47cb9iIsexJsc1gHNm7n39h45x8ykNzEbLtJRTQCxeXkse6IUzUHbMDjoVX3dQALRskOSshLjJlp4AzFcTGwfSwjvxjJqdH2oEfrXMNpcsPfM6PcOWLBjSlWy20bZD'
