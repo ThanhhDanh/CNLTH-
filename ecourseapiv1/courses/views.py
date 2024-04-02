@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from courses import serializers, paginators, permission
-from courses.models import Category, Course, Lesson, User, Comment
+from courses.models import Category, Course, Lesson, User, Comment, Like
 
 
 class CategoryViewSet(viewsets.ViewSet, generics.ListAPIView):
@@ -78,12 +78,29 @@ class LessonViewSet(viewsets.ViewSet, generics.RetrieveAPIView, generics.ListAPI
             return [permissions.IsAuthenticated()]
         return [permissions.AllowAny()]
 
+    def get_serializer_class(self):
+        if self.request.user.is_authenticated:
+            return serializers.AuthenticatedLessonDetailsSerializer
+
+        return self.serializer_class
+
     @action(methods=['post'], url_path='comments',detail=True)
     def add_comment(self, request,pk):
         #Comment.onject.create()
         c = self.get_object().comment_set.create(content = request.data.get("content"), user = request.user)
 
         return Response(serializers.CommentSerializer(c).data, status=status.HTTP_201_CREATED)
+
+
+    @action(methods=['post'], url_path = 'like', detail=True)
+    def like(self, request, pk):
+        like,created = Like.objects.get_or_create(lesson = self.get_object(), user = request.user)
+        if not created:
+            like.active = not like.active
+            like.save()
+        return Response(serializers.LessonDetailsSerializer(self.get_object()).data)
+
+
 
 
 class UserViewSet(viewsets.ViewSet, generics.CreateAPIView, generics.UpdateAPIView):
