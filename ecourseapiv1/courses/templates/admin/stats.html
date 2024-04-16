@@ -1,0 +1,48 @@
+{% extends 'admin/base_site.html' %}
+
+{% block content %}
+<h1>THÔNG KÊ KHÓA HỌC TRỰC TUYẾN</h1>
+
+<ul>
+    {% for c in course_stats %}
+    <li><strong>{{ c.name }}</strong>: {{ c.c}} khóa học</li>
+    {% endfor %}
+</ul>
+<canvas id="myChart"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    let labels = [];
+    let data = [];
+
+    {% for c in course_stats %}
+        data.push({{ c.c }})
+        labels.push('{{ c.name }}')
+    {% endfor %}
+
+    window.onload = function() {
+      const ctx = document.getElementById('myChart');
+
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+        datasets: [{
+            label: 'So luong',
+            data: data,
+            borderWidth: 1,
+            backgroundColor: ['red','blue','pink']
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    }
+
+</script>
+{% endblock %}
